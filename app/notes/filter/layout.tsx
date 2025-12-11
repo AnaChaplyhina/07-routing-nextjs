@@ -1,8 +1,7 @@
-
 import React from 'react';
 import css from './layout.module.css';
 
-export default function NotesLayout({
+export default function NotesFilterLayout({
   children,
   sidebar,
   modal,
@@ -12,7 +11,7 @@ export default function NotesLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <div className={css.layout}>
+    <div className={css.layoutWrapper}>
       <aside className={css.sidebar}>{sidebar}</aside>
       <main className={css.content}>{children}</main>
       {modal}

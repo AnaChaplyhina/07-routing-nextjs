@@ -1,19 +1,23 @@
-.container {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
+.layoutWrapper {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+    background-color: white;
 }
 
 .sidebar {
-    width: 250px;
-    background-color: #2c2c2c;
-    color: white;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #ddd;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
 }
 
-.notesWrapper {
-    width: 100%;
+.content {
+    padding: 40px;
+    background-color: #fafafa;
+}
+
+
+@media (max-width: 768px) {
+    .layoutWrapper {
+        grid-template-columns: 1fr;
+    }
 }
