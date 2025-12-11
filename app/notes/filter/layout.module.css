@@ -1,23 +1,14 @@
-.layoutWrapper {
+.container {
     display: grid;
     grid-template-columns: 280px 1fr;
     min-height: 100vh;
-    background-color: white;
 }
 
 .sidebar {
-    background: #fff;
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid #e7e7e7;
+    background-color: #fcfcfc;
 }
 
-.content {
+.main {
     padding: 40px;
-    background-color: #fafafa;
-}
-
-
-@media (max-width: 768px) {
-    .layoutWrapper {
-        grid-template-columns: 1fr;
-    }
 }
