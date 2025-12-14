@@ -1,19 +1,18 @@
+import Modal from '@/components/Modal/Modal';
+import NotePreview from '@/components/NotePreview/NotePreview';
+import { getNoteById } from '@/lib/api/notes';
 
-"use client";
-import Modal from "@/components/Modal/Modal";
-import NotePreview from "@/components/NotePreview/NotePreview";
-import { useRouter } from "next/navigation";
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
 
-export default function InterceptedNotePage({ params }: { params: { id: string } }) {
-  const router = useRouter();
-
-  const handleClose = () => {
-    router.back();
-  };
+export default async function InterceptedNotePage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const note = await getNoteById(resolvedParams.id);
 
   return (
-    <Modal isOpen={true} onClose={handleClose}>
-      <NotePreview noteId={params.id} />
+    <Modal>
+      <NotePreview note={note} />
     </Modal>
   );
 }
