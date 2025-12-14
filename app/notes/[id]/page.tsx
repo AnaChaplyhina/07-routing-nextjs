@@ -1,21 +1,22 @@
-// app/notes/filter/@modal/(..)[id]/page.tsx
-"use client";
-import Modal from "@/components/Modal/Modal";
-import NotePreview from "@/components/NotePreview/NotePreview";
-import { useRouter } from "next/navigation";
+import NotePreview from '@/components/NotePreview/NotePreview';
+import { getNoteById } from '@/lib/api/notes';
+import Link from 'next/link';
 
-export default function InterceptedNotePage({ params }: { params: { id: string } }) {
-  const router = useRouter();
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
 
-
-  const handleClose = () => {
-    router.back();
-  };
+export default async function Page({ params }: PageProps) {
+  const resolvedParams = await params;
+  const note = await getNoteById(resolvedParams.id);
 
   return (
-    <Modal isOpen={true} onClose={handleClose}>
-       {/* NotePreview має робити запит за noteId = params.id */}
-      <NotePreview noteId={params.id} />
-    </Modal>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+      <Link href="/notes/filter/all" style={{ marginBottom: '20px', display: 'inline-block' }}>
+        ← Back to list
+      </Link>
+      
+      <NotePreview note={note} />
+    </div>
   );
 }
