@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Note } from '@/types/note';
 
-const BASE_URL = "https://notehub-public.goit.study/api";
+const BASE_URL = 'https://notehub-public.goit.study/api';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -16,7 +16,9 @@ api.interceptors.request.use((config) => {
 });
 
 export const getNotes = async (tag?: string): Promise<Note[]> => {
+  // Логіка параметрів
   const params = tag && tag !== 'all' ? { tag } : {};
+  
   try {
     const { data } = await api.get<{ data: Note[] } | Note[]>('/notes', { params });
     if (Array.isArray(data)) return data;
