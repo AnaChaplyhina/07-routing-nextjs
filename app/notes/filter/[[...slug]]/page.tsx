@@ -1,4 +1,4 @@
-import NoteList from '@/components/NoteList/NoteList.tsx';
+import NoteList from '@/components/NoteList/NoteList';
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
@@ -6,6 +6,7 @@ interface PageProps {
 
 export default async function NoteListPage({ params }: PageProps) {
   const resolvedParams = await params;
+  
   const tagParam = resolvedParams.slug?.[0];
   const activeTag = tagParam === 'all' ? undefined : tagParam;
 
@@ -14,6 +15,7 @@ export default async function NoteListPage({ params }: PageProps) {
       <h1 style={{ marginBottom: '20px' }}>
         {!activeTag ? 'All Notes' : `Notes: ${activeTag}`}
       </h1>
+      
       <NoteList tag={activeTag} />
     </section>
   );

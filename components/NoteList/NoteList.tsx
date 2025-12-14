@@ -1,52 +1,40 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchNotes } from "@/lib/api/notes"; 
+import { getNotes } from "@/lib/api/notes";
 import Link from "next/link";
-import css from "./NoteList.module.css";
-
+import css from "./NoteList.module.css"; 
 
 interface NoteListProps {
-  tag?: string; 
+  tag?: string;
 }
 
 export default function NoteList({ tag }: NoteListProps) {
-  const page = 1;
-  const perPage = 9;
-
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["notes", page, tag],
-    queryFn: () => fetchNotes({ page, perPage, tag }),
+  const { data: notes, isLoading, isError } = useQuery({
+    queryKey: ["notes", tag], 
+    queryFn: () => getNotes(tag),
   });
 
-  if (isLoading) {
-    return <p className={css.loading}>Loading notes...</p>;
-  }
-
-  if (isError) {
-    return <p className={css.error}>Error loading notes. Please try again.</p>;
-  }
-
-  const notes = data?.notes || [];
-
-  if (notes.length === 0) {
-    return <p className={css.empty}>No notes found for this category.</p>;
+  if (isLoading) return <p className={css.loading}>Loading notes...</p>;
+  if (isError) return <p className={css.error}>Error loading notes!</p>;
+  
+  if (!notes || notes.length === 0) {
+    return <p className={css.empty}>No notes found.</p>;
   }
 
   return (
-    <ul className={css.list}>
+    <div className={css.listContainer}>
       {notes.map((note) => (
-        <li key={note.id} className={css.item}>
-          <Link href={`/notes/${note.id}`} className={css.link}>
-            <h3 className={css.noteTitle}>{note.title}</h3>
-            <span className={css.date}>{new Date(note.createdAt).toLocaleDateString()}</span>
-          </Link>
-        </li>
+        <article key={note.id} className={css.card}>
+          <h3 className={css.cardTitle}>{note.title}</h3>
+          <div className={css.cardFooter}>
+             <span className={css.date}>{new Date(note.date).toLocaleDateString()}</span>
+             <Link href={`/notes/${note.id}`} className={css.cardLink}>
+               Read more →
+             </Link>
+          </div>
+        </article>
       ))}
-    </ul>
+    </div>
   );
 }
