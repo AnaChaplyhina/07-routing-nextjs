@@ -1,4 +1,4 @@
-import NoteList from '@/components/NoteList/NoteList';
+import NoteList from '@/components/NoteList/NoteList.tsx';
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
@@ -11,10 +11,9 @@ export default async function NoteListPage({ params }: PageProps) {
 
   return (
     <section>
-      <h1 style={{ marginBottom: '20px', fontSize: '2rem', fontWeight: 'bold' }}>
+      <h1 style={{ marginBottom: '20px' }}>
         {!activeTag ? 'All Notes' : `Notes: ${activeTag}`}
       </h1>
-      
       <NoteList tag={activeTag} />
     </section>
   );

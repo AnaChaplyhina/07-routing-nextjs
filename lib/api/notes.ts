@@ -1,5 +1,5 @@
-import axios from "axios";
-import { Note, CreateNoteDto } from "../../types/note";
+import axios from 'axios';
+import { Note } from '@/types/note';
 
 const BASE_URL = "https://notehub-public.goit.study/api";
 
@@ -15,36 +15,24 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export interface FetchNotesResponse {
-  notes: Note[];
-  totalPages: number;
-}
-
-interface FetchNotesParams {
-  page: number;
-  perPage: number;
-  search?: string;
-  tag?: string; 
-}
-
-export const fetchNotes = async (
-  params: FetchNotesParams
-): Promise<FetchNotesResponse> => {
-  const { data } = await api.get<FetchNotesResponse>("/notes", { params });
-  return data;
+export const getNotes = async (tag?: string): Promise<Note[]> => {
+  const params = tag && tag !== 'all' ? { tag } : {};
+  try {
+    const { data } = await api.get<{ data: Note[] } | Note[]>('/notes', { params });
+    if (Array.isArray(data)) return data;
+    return (data as any).data || [];
+  } catch (error) {
+    console.error("Помилка завантаження нотаток:", error);
+    return [];
+  }
 };
 
-export const fetchNoteById = async (id: string): Promise<Note> => {
+export const getNoteById = async (id: string): Promise<Note> => {
   const { data } = await api.get<Note>(`/notes/${id}`);
   return data;
 };
 
-export const createNote = async (newNote: CreateNoteDto): Promise<Note> => {
-  const { data } = await api.post<Note>("/notes", newNote);
-  return data;
-};
-
-export const deleteNote = async (id: string): Promise<Note> => {
-  const { data } = await api.delete<Note>(`/notes/${id}`);
+export const createNote = async (note: Omit<Note, 'id' | 'date'>): Promise<Note> => {
+  const { data } = await api.post<Note>('/notes', note);
   return data;
 };
