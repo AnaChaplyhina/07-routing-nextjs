@@ -3,21 +3,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { getNotes } from "@/lib/api/notes"; 
 import Link from "next/link";
+import { Note } from "@/types/note"; 
 import css from "./NoteList.module.css"; 
 
 interface NoteListProps {
   tag?: string;
+  notes?: Note[]; 
 }
 
-export default function NoteList({ tag }: NoteListProps) {
-  const { data: notes, isLoading, isError } = useQuery({
-    queryKey: ["notes", tag], 
+export default function NoteList({ tag, notes: initialNotes }: NoteListProps) {
 
+  const { data: fetchedNotes, isLoading, isError } = useQuery({
+    queryKey: ["notes", tag], 
     queryFn: () => getNotes(tag),
+    enabled: !initialNotes, 
   });
 
-  if (isLoading) return <p className={css.loading}>Loading notes...</p>;
-  if (isError) return <p className={css.error}>Error loading notes!</p>;
+  const notes = initialNotes || fetchedNotes;
+
+  if (!initialNotes && isLoading) return <p className={css.loading}>Loading notes...</p>;
+  if (!initialNotes && isError) return <p className={css.error}>Error loading notes!</p>;
   
   if (!notes || notes.length === 0) {
     return <p className={css.empty}>No notes found.</p>;
