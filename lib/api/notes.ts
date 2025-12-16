@@ -16,10 +16,9 @@ api.interceptors.request.use((config) => {
 });
 
 export const getNotes = async (tag?: string): Promise<Note[]> => {
-
   const params: any = {
     page: 1,
-    perPage: 100, 
+    perPage: 12, 
   };
 
   if (tag && tag !== 'all') {
@@ -28,7 +27,6 @@ export const getNotes = async (tag?: string): Promise<Note[]> => {
 
   try {
     const { data } = await api.get<{ data: Note[] } | Note[]>('/notes', { params });
-    
     if (Array.isArray(data)) return data;
     return (data as any).data || [];
   } catch (error) {
