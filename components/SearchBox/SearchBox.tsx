@@ -1,6 +1,5 @@
 "use client";
 
-import { useDebouncedCallback } from "use-debounce";
 import { useRouter, useSearchParams } from "next/navigation";
 import css from "./SearchBox.module.css";
 
@@ -8,7 +7,7 @@ export default function SearchBox() {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const handleSearch = useDebouncedCallback((term: string) => {
+  const handleSearch = (term: string) => {
     const params = new URLSearchParams(searchParams);
     if (term) {
       params.set("search", term);
@@ -16,7 +15,7 @@ export default function SearchBox() {
       params.delete("search");
     }
     replace(`?${params.toString()}`);
-  }, 300);
+  };
 
   return (
     <div className={css.container}>
