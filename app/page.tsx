@@ -1,6 +1,12 @@
-
-import { redirect } from 'next/navigation';
+import NoteForm from "@/components/NoteForm/NoteForm";
 
 export default function Home() {
-  redirect('/notes/filter/all');
+  return (
+    <main style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Create New Note</h1>
+      
+      <NoteForm />
+      
+    </main>
+  );
 }
