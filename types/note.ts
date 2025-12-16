@@ -3,5 +3,11 @@ export interface Note {
   title: string;
   content: string;
   date: string;
-  tags: string[]; 
+  category: string; 
+}
+
+export interface CreateNoteDto {
+  title: string;
+  content: string;
+  category: string;
 }
