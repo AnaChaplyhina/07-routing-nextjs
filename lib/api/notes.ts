@@ -16,11 +16,19 @@ api.interceptors.request.use((config) => {
 });
 
 export const getNotes = async (tag?: string): Promise<Note[]> => {
-  // Логіка параметрів
-  const params = tag && tag !== 'all' ? { tag } : {};
-  
+
+  const params: any = {
+    page: 1,
+    perPage: 100, 
+  };
+
+  if (tag && tag !== 'all') {
+    params.tag = tag;
+  }
+
   try {
     const { data } = await api.get<{ data: Note[] } | Note[]>('/notes', { params });
+    
     if (Array.isArray(data)) return data;
     return (data as any).data || [];
   } catch (error) {
