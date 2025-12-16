@@ -1,6 +1,6 @@
-import NotePreview from '@/components/NotePreview/NotePreview';
 import { getNoteById } from '@/lib/api/notes';
 import Link from 'next/link';
+import NoteDetailsClient from './NoteDetails.client';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -16,7 +16,7 @@ export default async function Page({ params }: PageProps) {
         ← Back to list
       </Link>
       
-      <NotePreview note={note} />
+      <NoteDetailsClient note={note} />
     </div>
   );
 }
