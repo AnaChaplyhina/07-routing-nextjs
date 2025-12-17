@@ -6,7 +6,7 @@ import NoteList from "@/components/NoteList/NoteList";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import css from "@/app/notes/Notes.module.css"; 
+import css from "./Notes.module.css"; 
 
 interface Props {
   tag?: string;
