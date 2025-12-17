@@ -13,21 +13,42 @@ interface Props {
 export default function NotePreviewClient({ noteId }: Props) {
   const router = useRouter();
 
-  const { data: note, isLoading } = useQuery({
+  const { 
+    data: note, 
+    isLoading, 
+    isError 
+  } = useQuery({
     queryKey: ["note", noteId],
     queryFn: () => getNoteById(noteId),
+    refetchOnMount: false, 
   });
 
   const handleClose = () => {
     router.back();
   };
 
-  if (isLoading) return <Modal>Loading...</Modal>;
-  if (!note) return null;
+  if (isLoading) {
+    return (
+      <Modal onClose={handleClose}>
+        <div style={{ padding: 20 }}>Loading note...</div>
+      </Modal>
+    );
+  }
+
+  if (isError || !note) {
+    return (
+      <Modal onClose={handleClose}>
+        <div style={{ padding: 20, color: 'red' }}>
+          <h2>Error</h2>
+          <p>Failed to load note details.</p>
+          <button onClick={handleClose}>Close</button>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
-
-    <Modal> 
+    <Modal onClose={handleClose}>
       <NotePreview note={note} />
     </Modal>
   );

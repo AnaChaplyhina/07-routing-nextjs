@@ -1,24 +1,28 @@
-'use client';
-import { useRouter } from 'next/navigation';
-import { useEffect, useCallback } from 'react';
-import css from './Modal.module.css';
+"use client";
 
-export default function Modal({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const onDismiss = useCallback(() => router.back(), [router]);
+import { ReactNode } from "react";
+import css from "./Modal.module.css";
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onDismiss();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [onDismiss]);
+interface ModalProps {
+  children: ReactNode;
+  onClose?: () => void; 
+}
+
+export default function Modal({ children, onClose }: ModalProps) {
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && onClose) {
+      onClose();
+    }
+  };
 
   return (
-    <div className={css.overlay} onClick={onDismiss}>
-      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={css.closeButton} onClick={onDismiss}>×</button>
+    <div className={css.overlay} onClick={handleBackdropClick}>
+      <div className={css.modal}>
+        {onClose && (
+          <button className={css.closeButton} onClick={onClose}>
+            ×
+          </button>
+        )}
         {children}
       </div>
     </div>
