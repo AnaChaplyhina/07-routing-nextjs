@@ -15,14 +15,23 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const getNotes = async (tag?: string): Promise<Note[]> => {
+export const getNotes = async (
+  tag?: string, 
+  search?: string, 
+  page: number = 1
+): Promise<Note[]> => {
+  
   const params: any = {
-    page: 1,
-    perPage: 12, 
+    page,
+    perPage: 6, 
   };
 
   if (tag && tag !== 'all') {
     params.tag = tag;
+  }
+  
+  if (search) {
+    params.search = search;
   }
 
   try {

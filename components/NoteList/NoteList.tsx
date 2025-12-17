@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getNotes } from "@/lib/api/notes"; 
 import Link from "next/link";
-import { Note } from "@/types/note"; 
+import { Note } from "@/types/note";
 import css from "./NoteList.module.css"; 
 
 interface NoteListProps {
@@ -12,11 +12,10 @@ interface NoteListProps {
 }
 
 export default function NoteList({ tag, notes: initialNotes }: NoteListProps) {
-
   const { data: fetchedNotes, isLoading, isError } = useQuery({
     queryKey: ["notes", tag], 
     queryFn: () => getNotes(tag),
-    enabled: !initialNotes, 
+    enabled: !initialNotes,
   });
 
   const notes = initialNotes || fetchedNotes;
