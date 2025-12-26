@@ -3,22 +3,22 @@
 import { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
-import { getNotes } from '@/lib/api/notes';
-import { Note } from '@/types/note';
+import { getNotes } from '../../../../lib/api/notes';
+import { Note } from '../../../../types/note';
 
-import SearchBox from '@/components/SearchBox/SearchBox';
-import Pagination from '@/components/Pagination/Pagination';
-import Modal from '@/components/Modal/Modal';
-import NoteForm from '@/components/NoteForm/NoteForm';
-import NoteList from '@/components/NoteList/NoteList';
+import SearchBox from '../../../../components/SearchBox/SearchBox';
+import Pagination from '../../../../components/Pagination/Pagination';
+import Modal from '../../../../components/Modal/Modal';
+import NoteForm from '../../../../components/NoteForm/NoteForm';
+import NoteList from '../../../../components/NoteList/NoteList';
+
+interface NotesClientProps {
+  tag: string;
+}
 
 interface NotesResponse {
   notes: Note[];
   totalPages: number;
-}
-
-interface NotesClientProps {
-  tag: string;
 }
 
 export function NotesClient({ tag }: NotesClientProps) {
@@ -39,16 +39,8 @@ export function NotesClient({ tag }: NotesClientProps) {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading notes!</div>;
 
-  let notes: Note[] = [];
-  let totalPages = 1;
-
-  if (Array.isArray(data)) {
-    notes = data;
-    totalPages = 1; 
-  } else if (data && 'notes' in data) {
-    notes = (data as NotesResponse).notes;
-    totalPages = (data as NotesResponse).totalPages;
-  }
+  const notes: Note[] = Array.isArray(data) ? data : [];
+  const totalPages = 1;
 
   return (
     <div className="notes-container">
@@ -57,9 +49,11 @@ export function NotesClient({ tag }: NotesClientProps) {
         <button onClick={() => setIsModalOpen(true)}>Add Note</button>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <NoteForm onClose={handleCloseModal} />
-      </Modal>
+      {isModalOpen && (
+        <Modal onClose={handleCloseModal}>
+          <NoteForm onClose={handleCloseModal} />
+        </Modal>
+      )}
 
       {notes.length > 0 ? (
         <NoteList notes={notes} />
