@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
+
 import { getNotes } from '../../../../lib/api/notes';
 import { Note } from '../../../../types/note';
 
@@ -14,11 +15,6 @@ import NoteList from '../../../../components/NoteList/NoteList';
 
 interface NotesClientProps {
   tag: string;
-}
-
-interface NotesResponse {
-  notes: Note[];
-  totalPages: number;
 }
 
 export function NotesClient({ tag }: NotesClientProps) {

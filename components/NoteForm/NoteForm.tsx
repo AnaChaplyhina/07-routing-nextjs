@@ -5,7 +5,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNote } from "@/lib/api/notes";
 import css from "./NoteForm.module.css";
 
-export default function NoteForm() {
+interface NoteFormProps {
+  onClose?: () => void;
+}
+
+export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
 
   const [title, setTitle] = useState("");
@@ -20,6 +24,10 @@ export default function NoteForm() {
       setTitle("");
       setContent("");
       setCategory("Personal");
+      
+      if (onClose) {
+        onClose();
+      }
     },
     onError: (error) => {
       console.error(error);
