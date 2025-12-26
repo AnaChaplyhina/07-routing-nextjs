@@ -17,12 +17,22 @@ interface NotesClientProps {
   tag: string;
 }
 
+interface PaginatedResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
 export function NotesClient({ tag }: NotesClientProps) {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [debouncedSearch] = useDebounce(search, 500);
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['notes', tag, debouncedSearch, currentPage],
@@ -35,13 +45,27 @@ export function NotesClient({ tag }: NotesClientProps) {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading notes!</div>;
 
-  const notes: Note[] = Array.isArray(data) ? data : [];
-  const totalPages = 1;
+  let notes: Note[] = [];
+  let totalPages = 1;
+
+  if (data) {
+    if (Array.isArray(data)) {
+      
+      notes = data;
+    } else {
+
+      const response = data as unknown as PaginatedResponse;
+      if (response.notes) {
+        notes = response.notes;
+        totalPages = response.totalPages;
+      }
+    }
+  }
 
   return (
     <div className="notes-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-        <SearchBox value={search} onChange={setSearch} />
+        <SearchBox value={search} onChange={handleSearchChange} />
         <button onClick={() => setIsModalOpen(true)}>Add Note</button>
       </div>
 
