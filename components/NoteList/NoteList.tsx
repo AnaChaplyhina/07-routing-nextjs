@@ -20,7 +20,7 @@ export default function NoteList({ notes = [] }: NoteListProps) {
           <div className={css.content}>
             <h3 className={css.cardTitle}>{note.title}</h3>
             <span className={css.date}>
-              {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : 'No date'}
+              {note.date ? new Date(note.date).toLocaleDateString() : 'No date'}
             </span>
           </div>
           <Link href={`/notes/${note.id}`} className={css.cardLink}>
