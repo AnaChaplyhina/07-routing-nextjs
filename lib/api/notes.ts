@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Note } from '@/types/note';
 
-const BASE_URL = 'https://notehub-public.goit.study/api';
+const BASE_URL = 'https://notehub-public.goit.study/api/auth';
 
 const api = axios.create({
   baseURL: BASE_URL,
