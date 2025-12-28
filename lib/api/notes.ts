@@ -15,7 +15,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export interface FetchNotesResponse {
@@ -34,9 +33,8 @@ export const getNotes = async (
     perPage: 6, 
   };
 
-  
   if (tag && tag !== 'all') {
-    params.category = capitalize(tag); 
+    params.tag = capitalize(tag); 
   }
   
   if (search) {
