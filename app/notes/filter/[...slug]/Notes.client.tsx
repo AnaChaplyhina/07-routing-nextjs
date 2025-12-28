@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
 
 import { getNotes } from '../../../../lib/api/notes';
 import { Note } from '../../../../types/note';
-
 import SearchBox from '../../../../components/SearchBox/SearchBox';
 import Pagination from '../../../../components/Pagination/Pagination';
 import Modal from '../../../../components/Modal/Modal';
@@ -17,15 +16,15 @@ interface NotesClientProps {
   tag: string;
 }
 
-interface PaginatedResponse {
-  notes: Note[];
-  totalPages: number;
-}
-
 export function NotesClient({ tag }: NotesClientProps) {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setSearch('');
+  }, [tag]);
 
   const [debouncedSearch] = useDebounce(search, 500);
 
@@ -45,22 +44,9 @@ export function NotesClient({ tag }: NotesClientProps) {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading notes!</div>;
 
-  let notes: Note[] = [];
-  let totalPages = 1;
 
-  if (data) {
-    if (Array.isArray(data)) {
-      
-      notes = data;
-    } else {
-
-      const response = data as unknown as PaginatedResponse;
-      if (response.notes) {
-        notes = response.notes;
-        totalPages = response.totalPages;
-      }
-    }
-  }
+  const notes = data?.notes || [];
+  const totalPages = data?.totalPages || 1;
 
   return (
     <div className="notes-container">
@@ -78,7 +64,9 @@ export function NotesClient({ tag }: NotesClientProps) {
       {notes.length > 0 ? (
         <NoteList notes={notes} />
       ) : (
-        <div>No notes found</div>
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          No notes found.
+        </div>
       )}
 
       {totalPages > 1 && (

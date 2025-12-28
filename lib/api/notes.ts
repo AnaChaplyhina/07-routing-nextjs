@@ -15,19 +15,28 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
 export const getNotes = async (
   tag?: string, 
   search?: string, 
   page: number = 1
-): Promise<Note[]> => {
+): Promise<FetchNotesResponse> => {
   
   const params: any = {
     page,
     perPage: 6, 
   };
 
+  
   if (tag && tag !== 'all') {
-    params.tag = tag;
+    params.category = capitalize(tag); 
   }
   
   if (search) {
@@ -35,12 +44,23 @@ export const getNotes = async (
   }
 
   try {
-    const { data } = await api.get<{ data: Note[] } | Note[]>('/notes', { params });
-    if (Array.isArray(data)) return data;
-    return (data as any).data || [];
+    const { data } = await api.get('/notes', { params });
+    
+    if ('data' in data && Array.isArray(data.data)) {
+      return {
+        notes: data.data,
+        totalPages: data.totalPages || 1
+      };
+    }
+    
+    if (Array.isArray(data)) {
+      return { notes: data, totalPages: 1 };
+    }
+
+    return { notes: [], totalPages: 1 };
   } catch (error) {
     console.error("Помилка завантаження нотаток:", error);
-    return [];
+    return { notes: [], totalPages: 1 };
   }
 };
 
