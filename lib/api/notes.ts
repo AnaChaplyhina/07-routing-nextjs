@@ -33,12 +33,11 @@ export const getNotes = async (
     perPage: 6, 
   };
 
-  if (tag && tag !== 'all') {
-    params.tag = capitalize(tag); 
-  }
-  
+
   if (search) {
     params.search = search;
+  } else if (tag && tag !== 'all') {
+    params.search = capitalize(tag);
   }
 
   try {
@@ -57,7 +56,7 @@ export const getNotes = async (
 
     return { notes: [], totalPages: 1 };
   } catch (error) {
-    console.error("Помилка завантаження нотаток:", error);
+    console.error("Помилка API:", error);
     return { notes: [], totalPages: 1 };
   }
 };

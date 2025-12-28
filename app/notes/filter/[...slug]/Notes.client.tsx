@@ -6,6 +6,7 @@ import { useDebounce } from 'use-debounce';
 
 import { getNotes } from '../../../../lib/api/notes';
 import { Note } from '../../../../types/note';
+
 import SearchBox from '../../../../components/SearchBox/SearchBox';
 import Pagination from '../../../../components/Pagination/Pagination';
 import Modal from '../../../../components/Modal/Modal';
@@ -20,6 +21,7 @@ export function NotesClient({ tag }: NotesClientProps) {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   useEffect(() => {
     setCurrentPage(1);
@@ -44,7 +46,6 @@ export function NotesClient({ tag }: NotesClientProps) {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading notes!</div>;
 
-
   const notes = data?.notes || [];
   const totalPages = data?.totalPages || 1;
 
@@ -61,13 +62,7 @@ export function NotesClient({ tag }: NotesClientProps) {
         </Modal>
       )}
 
-      {notes.length > 0 ? (
-        <NoteList notes={notes} />
-      ) : (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          No notes found.
-        </div>
-      )}
+      <NoteList notes={notes} />
 
       {totalPages > 1 && (
         <Pagination
